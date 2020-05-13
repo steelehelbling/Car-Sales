@@ -1,15 +1,25 @@
-import React from 'react';
+import React from "react";
+import AddedFeature from "./AddedFeature";
+import { removecarpart, removeFeaturePrice } from "../actions";
+import { connect } from "react-redux";
 
-import AddedFeature from './AddedFeature';
-
-const AddedFeatures = props => {
+const AddedFeatures = (props) => {
+  const removeFeatureHandler = (feature) => {
+    props.removecarpart(feature);
+    props.removeFeaturePrice(feature.price);
+  };
+  
   return (
     <div className="content">
       <h6>Added features:</h6>
       {props.car.features.length ? (
         <ol type="1">
-          {props.car.features.map(item => (
-            <AddedFeature key={item.id} feature={item} />
+          {props.car.features.map((item) => (
+            <AddedFeature
+              key={item.id}
+              feature={item}
+              removeFeatureHandler={removeFeatureHandler}
+            />
           ))}
         </ol>
       ) : (
@@ -19,4 +29,12 @@ const AddedFeatures = props => {
   );
 };
 
-export default AddedFeatures;
+const mapStateToProps = (state) => {
+  return {
+    car: state.oncar,
+  };
+};
+
+export default connect(mapStateToProps, { removecarpart, removeFeaturePrice })(
+  AddedFeatures
+);
